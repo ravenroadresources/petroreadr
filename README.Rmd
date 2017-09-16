@@ -9,7 +9,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+### petroreadr
+
 This package is currently work-in-progress.
+
 To install the package, run `devtools::install_github("ravenroadresources/petroreadr")`
 
 At today, it includes 3 functions to read file formats commonly used in the oil
@@ -20,7 +23,7 @@ industry.
  * read_gslib()
 
 
-Additionally, a modified version of the base::summary function is included.
+Additionally, a modified version of the `base::summary` function is included.
 This modified version adds p90, p10 and st.dev.
 
 &nbsp;
