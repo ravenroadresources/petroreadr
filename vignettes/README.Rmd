@@ -10,6 +10,7 @@ vignette: >
 ---
 
 This package is currently work-in-progress.
+To install it, run `devtools::install_github("ravenroadresources/petroreadr")`
 
 At today, it includes 3 functions to read file formats commonly used in the oil
 industry. 
