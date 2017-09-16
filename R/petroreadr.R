@@ -168,7 +168,7 @@ read_asciigrid <- function(filename,
         # if is a pair (n*v)
         else if (grepl("\\*", raw_values[i,j])) {
           # split the pair
-          temp <- as.numeric(stingr::str_split(raw_values[i, j], "\\*", simplify = TRUE))
+          temp <- as.numeric(stringr::str_split(raw_values[i, j], "\\*", simplify = TRUE))
           # redefine an array repeating n times the value v
           x <- rep(temp[2], temp[1])
           # cocantenate with previous values

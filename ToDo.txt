@@ -1,6 +1,5 @@
 PACKAGE TO DO:
 
-correct WARNING '::' or ':::' import not declared from: ‘stingr’
 add testing
 add sample .las / asciigrid / .gslib files
 add detailed vignette
