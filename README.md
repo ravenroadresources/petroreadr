@@ -29,3 +29,5 @@ This modified version adds p90, p10 and st.dev.
 &nbsp;
 
 Developed by: [RavenRoad S.A.S.](http://www.ravenroadresources.com)
+
+[![Build Status](https://travis-ci.org/ravenroadresources/petroreadr.svg?branch=master)](https://travis-ci.org/ravenroadresources/petroreadr)

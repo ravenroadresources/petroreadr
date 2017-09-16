@@ -42,8 +42,8 @@ read_las <- function(filename,
   wellname <- stringr::word(gsub("\\s+"," ", stringr::str_trim(oneline)),2)[1]
 
   # 1.b get the names of the logs
-  aa <- match(headerlines[grep("~Curve",headerlines)], headerlines)
-  bb <- match(headerlines[grep("~Parameter",headerlines)], headerlines)
+  aa <- match(headerlines[grep("~Curve", headerlines)], headerlines)
+  bb <- match(headerlines[grep("~Parameter", headerlines)], headerlines)
   ncurves <- bb-aa-1
   logname <- seq(0, 0, ncurves)
   for (i in 1:ncurves) {
