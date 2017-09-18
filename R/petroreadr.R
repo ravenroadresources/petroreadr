@@ -39,7 +39,8 @@ read_las <- function(filename,
 
   # 1.a get the well name
   oneline <- headerlines[grep("WELL.",headerlines)]
-  wellname <- stringr::word(gsub("\\s+"," ", stringr::str_trim(oneline)),2)[1]
+  #wellname <- stringr::word(gsub("\\s+"," ", stringr::str_trim(oneline)),2)[1]
+  wellname <- extract_wellname(oneline)
 
   # 1.b get the names of the logs
   aa <- match(headerlines[grep("~Curve", headerlines)], headerlines)
@@ -346,3 +347,26 @@ read_gslib <- function(filename, complete = TRUE, propnull="-99.00") {
 }
 
 
+
+
+#' Extract Well Name from .las line
+#'
+#' @note internal function used in \code{read_las}
+#'
+#' @param oneline string character containing the well name extracted form .las file
+#'
+#' @return string with the ecxtacte well name
+#'
+#' @importFrom stringr str_trim
+#'
+extract_wellname <- function(oneline) {
+
+  temp <- stringr::str_trim(oneline) # remove initial and final spaces
+  temp <- gsub("\\s+", " ", temp) # replace multiple spaces with 1 space
+  temp <- sub("WELL\\.", "", temp) # remove initial "WELL."
+  temp <- sub("WELL \\.", "", temp) # remove initial "WELL ."
+  temp <- gsub("(.*): WELL", "\\1", temp) #remove ": WELL" at the end of the string
+  temp <- stringr::str_trim(temp) #remove initial and final spaces
+
+  return(temp)
+}

@@ -9,6 +9,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+[![Build Status](https://travis-ci.org/ravenroadresources/petroreadr.svg?branch=master)](https://travis-ci.org/ravenroadresources/petroreadr)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+
+
 ### petroreadr
 
 This package is currently work-in-progress.
@@ -23,11 +28,10 @@ industry.
  * read_gslib()
 
 
-Additionally, a modified version of the `base::summary` function is included.
+Additionally, a modified version of the `base::summary` function is included, called `summary_mod`.
 This modified version adds p90, p10 and st.dev.
 
 &nbsp;
 
 Developed by: [RavenRoad S.A.S.](http://www.ravenroadresources.com)
 
-[![Build Status](https://travis-ci.org/ravenroadresources/petroreadr.svg?branch=master)](https://travis-ci.org/ravenroadresources/petroreadr)

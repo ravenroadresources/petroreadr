@@ -1,5 +1,6 @@
 PACKAGE TO DO:
 
-add testing
+review full .las standard
 add sample .las / asciigrid / .gslib files
 add detailed vignette
+add more tests
