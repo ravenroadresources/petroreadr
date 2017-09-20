@@ -416,18 +416,30 @@ extract_wellname <- function(oneline) {
 #'
 #' @export
 write_las <- function(df, name, prefix = "", verbose = TRUE, do = FALSE) {
+  wellname <- unique(df$WELL)
+  df <- df[ , 2:ncol(df)]
   filename <- paste0(prefix, name, ".las")
-  curvenames <- paste(colnames(df), sep = "\n")
-  cat(paste("~Version Information",
-            "VERS. 2.0  :CWLS Log ASCII Standard - Version 2.00",
-            "# ----------------------------------",
+
+  # header
+  cat(paste("# LAS format log file from R (petroreadr)",
+      "~Version Information",
+      "VERS. 2.0  :CWLS Log ASCII Standard - Version 2.00",
+      "# ----------------------------------",
+      "~Well",
+      "",
+      sep = "\n"),
+    file = filename, append = TRUE)
+  cat(paste("WELL.", wellname, ": WELL", "\n"), file = filename, append = TRUE)
+  cat(paste("DATE.", Sys.time(), ": Log Export Date {yyyy-MM-dd HH:mm:ss}", "\n"), file = filename, append = TRUE)
+  cat(paste("# ----------------------------------",
             "~Curve Information",
-            "", sep = "\n"), file = filename)
+            "", sep = "\n"), file = filename, append = TRUE)
   cat(paste(colnames(df), "", sep = "\n"), file = filename, append = TRUE)
   cat(paste("# ----------------------------------",
             "~Ascii",
             "", sep = "\n"), file = filename, append = TRUE)
 
+  # log data
   utils::write.table(df, filename, append = TRUE, quote = FALSE, row.names = FALSE, col.names = FALSE)
   if (verbose) print(filename)
   if (do) return(df)
