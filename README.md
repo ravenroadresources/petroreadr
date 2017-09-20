@@ -20,16 +20,16 @@ This package is currently work-in-progress.
 
 To install the package, run `devtools::install_github("ravenroadresources/petroreadr")`
 
-At today, it includes 3 functions to read file formats commonly used in the oil
-industry. 
+At today, it includes 4 functions to read and write file formats commonly used in the oil industry.
 
- * read_las()
- * read_asciigrid()
- * read_gslib()
+ * `read_las()`
+ * `write_las()`
+ * `read_asciigrid()`
+ * `read_gslib()`
 
 
 Additionally, a modified version of the `base::summary` function is included, called `summary_mod`.
-This modified version adds p90, p10 and st.dev.
+This modified version adds p90, p10 and st.dev statistics to the output.
 
 &nbsp;
 

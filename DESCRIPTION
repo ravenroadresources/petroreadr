@@ -1,7 +1,7 @@
 Package: petroreadr
 Type: Package
 Title: Read File Formats Used In The Oil Industry
-Version: 0.1.1b
+Version: 0.2.0
 Author: RavenRoad S.A.S.
 Maintainer: Francesco Giorgetti <fg@ravenroadresources.com>
 Description: This package include functions to read common file formats used in 
