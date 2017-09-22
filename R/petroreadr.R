@@ -38,8 +38,8 @@ read_las <- function(filename,
   headerlines <- readLines(con = lasfile, n = 100L, ok = TRUE, skipNul = TRUE)
 
   # 1.a get the well name
-  pattern <- paste("WELL \\.", "WELL\\.", sep = "|")
-  oneline <- headerlines[grep(pattern, headerlines)]
+  #pattern <- paste("WELL *\\.", "WELL\\.", sep = "|")
+  oneline <- headerlines[grep("WELL *\\.", headerlines)]
   #wellname <- stringr::word(gsub("\\s+"," ", stringr::str_trim(oneline)),2)[1]
   wellname <- extract_wellname(oneline)
 
@@ -92,11 +92,11 @@ read_las <- function(filename,
 #'   easier to operate gslib-like format.
 #'
 #' @param filename A character string giving the name or path of the file to be read.
+#' @param dims An array of length = 3,telling the IJK dimension of the cube.
+#'   Has no default.
 #' @param index A logic flag telling if IJK index should be returned or not.
 #'   If set to \code{FALSE} following parameters are ignored.
 #'   Default \code{TRUE}.
-#' @param dims An array of length = 3,telling the IJK dimension of the cube.
-#'   Has no default.
 #' @param order A character string defining in which order Petrel exported the grid.
 #'   Petrel Export Options:
 #'   Cell Origin at (I=0, J=0, K)
@@ -129,8 +129,8 @@ read_las <- function(filename,
 #'
 #' @export
 read_asciigrid <- function(filename,
-                           index = TRUE,
                            dims,
+                           index = TRUE,
                            order = "IJK",
                            along = "I") {
 
@@ -367,21 +367,11 @@ read_gslib <- function(filename, complete = TRUE, propnull="-99.00") {
 #'
 extract_wellname <- function(oneline) {
 
-  pattern_1 <- paste("WELL \\.", "WELL\\.", sep = "|")
-  pattern_2 <- paste("(.*) : WELL", "(.*) :WELL", sep = "|")
-
   temp <- stringr::str_trim(oneline) # remove initial and final spaces
   temp <- gsub("\\s+", " ", temp) # replace multiple spaces with 1 space
-  #temp <- sub("WELL\\.", "", temp) # remove initial "WELL."
-  #temp <- sub("WELL \\.", "", temp) # remove initial "WELL ."
-  temp <- sub(pattern_1, "", temp) # remove initial "WELL ."
-  #temp <- sub(pattern_2, "", temp) # remove initial "WELL ."
-  temp <- sub("(.*) :WELL", "\\1", temp) #remove ": WELL" at the end of the string
-  temp <- sub("(.*) : WELL", "\\1", temp) #remove ": WELL" at the end of the string
-  temp <- sub("(.*) :Well", "\\1", temp) #remove ": WELL" at the end of the string
-  temp <- sub("(.*) : Well", "\\1", temp) #remove ": WELL" at the end of the string
+  temp <- sub("WELL *\\.", "", temp) # remove initial "WELL ." with any number of spaces between WELL and .
+  temp <- sub("\\: *\\w* *\\w* *\\w*", "", temp) # remove final ": WELL" with any number of spaces between : and WELL
   temp <- stringr::str_trim(temp) #remove initial and final spaces
-
 
   return(temp)
 }
@@ -389,58 +379,64 @@ extract_wellname <- function(oneline) {
 
 #' Write well log dataframe to las file format
 #'
-#' @param df a dataframe. The curves names are taken from the column names of the dataframe.
-#' @param name variable to be used as part of the .csv file name. Usually in the form \code{name = unique(.$id)},
-#'     where \code{id} was used as grouping variable.
-#' @param prefix a string with the prefix of the generated .csv files
+#' @param data a dataframe. The curves names are taken from the column names of the dataframe.
+#' @param name variable to be used as .las file name. Usually in the form \code{name = unique(.$id)},
+#'     where \code{id} was used as grouping variable. The extension .las is added automatically.
 #' @param verbose logical, define whether the function should print out the names of the writen .csv files.
 #'     Dafault = TRUE.
 #' @param do logical, define if the output is a data frame. Dafault = FALSE.
-#'     This is required if used with function \code{dplyr::do} requires to return a dataframe.
-#'     The obtaied dataframe can be dumped with \code{rm(dataframe_name)}.
+#'     This is required if used with function \code{dplyr::do}, which requires to return a dataframe.
+#'     The obtained dataframe can be dumped with \code{rm(dataframe_name)}.
 #'
 #' @return write .las file.
 #'     Additionally returns a dataframe if \code{do = TRUE} .
 #'     As side effect, if \code{verbose = TRUE} prints out the names of the writen .las files
 #'
-#'@importFrom utils write.table
+#' @importFrom utils write.table
+#' @importFrom dplyr rename
+#' @importFrom magrittr %<>%
 #'
 #' @examples
 #' \dontrun{
-#' dumpv_df <- df %>%
-#'	 dplyr::group_by(id) %>%
-#'	 do(write.csv.group(. , name = unique(.$id), prefix = "logperm_", do = TRUE))
+#' write_las(df , name = paste(unique(.$id), "_version01"))
 #'
+#' dump_df <- df %>%
+#'	 dplyr::group_by(id) %>%
+#'	 do(write_las(. , name = unique(.$id), do = TRUE))
 #' rm(dump_df)
 #' }
 #'
 #' @export
-write_las <- function(df, name, prefix = "", verbose = TRUE, do = FALSE) {
-  wellname <- unique(df$WELL)
-  df <- df[ , 2:ncol(df)]
-  filename <- paste0(prefix, name, ".las")
+write_las <- function(data, name, verbose = TRUE, do = FALSE) {
+  wellname <- unique(data$WELL)
+  data <- data[ , 2:ncol(data)]
+  filename <- ifelse(grepl(".las", name), name,  paste0(name, ".las"))
+
+  if ("DEPTH" %in% colnames(data)) data %<>% dplyr::rename_("DEPT" = "DEPTH")
 
   # header
-  cat(paste("# LAS format log file from R (petroreadr)",
-      "~Version Information",
-      "VERS. 2.0  :CWLS Log ASCII Standard - Version 2.00",
-      "# ----------------------------------",
-      "~Well",
-      "",
-      sep = "\n"),
-    file = filename, append = TRUE)
-  cat(paste("WELL.", wellname, ": WELL", "\n"), file = filename, append = TRUE)
-  cat(paste("DATE.", Sys.time(), ": Log Export Date {yyyy-MM-dd HH:mm:ss}", "\n"), file = filename, append = TRUE)
+  cat(paste("# LAS format log file from R (petroreadr) \n",
+      "~Version Information \n",
+      "VERS. 2.0  :CWLS Log ASCII Standard - Version 2.00 \n",
+      "# ---------------------------------- \n",
+      "~Well \n"), file = filename)
+  cat(paste("STRT  .F \t", min(data$DEPT), "\t :START DEPTH \n"), file = filename, append = TRUE)
+  cat(paste("STOP  .F \t", max(data$DEPT), "\t :STOP DEPTH \n"), file = filename, append = TRUE)
+  cat(paste("STEP  .F \t", data$DEPT[2] - data$DEPT[1], "\t :STEP \n"), file = filename, append = TRUE)
+  cat(paste("NULL  . \t", NA, "\t :NULL VALUE \n"), file = filename, append = TRUE)
+  cat(paste("WELL. \t", wellname, "\t \t : WELL \n"), file = filename, append = TRUE)
+  cat(paste("DATE. \t", Sys.time(), "\t \t : Log Export Date {yyyy-MM-dd HH:mm:ss} \n"), file = filename, append = TRUE)
+  cat(paste("# ---------------------------------- \n",
+            "~Curve Information \n"), file = filename, append = TRUE)
+  for (i in 1:length(data)) {
+    cat(paste(colnames(data)[i], "\t ._ \t \t \t: ", colnames(data)[i], "\n"), file = filename, append = TRUE)
+  }
   cat(paste("# ----------------------------------",
-            "~Curve Information",
-            "", sep = "\n"), file = filename, append = TRUE)
-  cat(paste(colnames(df), "", sep = "\n"), file = filename, append = TRUE)
-  cat(paste("# ----------------------------------",
-            "~Ascii",
-            "", sep = "\n"), file = filename, append = TRUE)
+            "~Ascii \n", sep = "\n"), file = filename, append = TRUE)
 
   # log data
-  utils::write.table(df, filename, append = TRUE, quote = FALSE, row.names = FALSE, col.names = FALSE)
+  utils::write.table(data, filename, append = TRUE, quote = FALSE, row.names = FALSE, col.names = FALSE)
   if (verbose) print(filename)
-  if (do) return(df)
+  if (do) return(data)
 }
+

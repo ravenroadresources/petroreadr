@@ -1,7 +1,7 @@
 Package: petroreadr
 Type: Package
 Title: Read File Formats Used In The Oil Industry
-Version: 0.2.0
+Version: 0.2.1
 Author: RavenRoad S.A.S.
 Maintainer: Francesco Giorgetti <fg@ravenroadresources.com>
 Description: This package include functions to read common file formats used in 
@@ -13,7 +13,8 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
 Imports: dplyr,
-    stringr
+    stringr,
+    magrittr
 Suggests: knitr,
     rmarkdown, 
     roxygen2,

@@ -4,22 +4,20 @@
 \alias{write_las}
 \title{Write well log dataframe to las file format}
 \usage{
-write_las(df, name, prefix = "", verbose = TRUE, do = FALSE)
+write_las(data, name, verbose = TRUE, do = FALSE)
 }
 \arguments{
-\item{df}{a dataframe. The curves names are taken from the column names of the dataframe.}
+\item{data}{a dataframe. The curves names are taken from the column names of the dataframe.}
 
-\item{name}{variable to be used as part of the .csv file name. Usually in the form \code{name = unique(.$id)},
-where \code{id} was used as grouping variable.}
-
-\item{prefix}{a string with the prefix of the generated .csv files}
+\item{name}{variable to be used as .las file name. Usually in the form \code{name = unique(.$id)},
+where \code{id} was used as grouping variable. The extension .las is added automatically.}
 
 \item{verbose}{logical, define whether the function should print out the names of the writen .csv files.
 Dafault = TRUE.}
 
 \item{do}{logical, define if the output is a data frame. Dafault = FALSE.
-This is required if used with function \code{dplyr::do} requires to return a dataframe.
-The obtaied dataframe can be dumped with \code{rm(dataframe_name)}.}
+This is required if used with function \code{dplyr::do}, which requires to return a dataframe.
+The obtained dataframe can be dumped with \code{rm(dataframe_name)}.}
 }
 \value{
 write .las file.
@@ -31,10 +29,11 @@ Write well log dataframe to las file format
 }
 \examples{
 \dontrun{
-dumpv_df <- df \%>\%
- dplyr::group_by(id) \%>\%
- do(write.csv.group(. , name = unique(.$id), prefix = "logperm_", do = TRUE))
+write_las(df , name = paste(unique(.$id), "_version01"))
 
+dump_df <- df \%>\%
+ dplyr::group_by(id) \%>\%
+ do(write_las(. , name = unique(.$id), do = TRUE))
 rm(dump_df)
 }
 

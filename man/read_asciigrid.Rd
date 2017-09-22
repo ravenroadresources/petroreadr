@@ -4,17 +4,17 @@
 \alias{read_asciigrid}
 \title{Read grid properties exported in ascii format}
 \usage{
-read_asciigrid(filename, index = TRUE, dims, order = "IJK", along = "I")
+read_asciigrid(filename, dims, index = TRUE, order = "IJK", along = "I")
 }
 \arguments{
 \item{filename}{A character string giving the name or path of the file to be read.}
 
+\item{dims}{An array of length = 3,telling the IJK dimension of the cube.
+Has no default.}
+
 \item{index}{A logic flag telling if IJK index should be returned or not.
 If set to \code{FALSE} following parameters are ignored.
 Default \code{TRUE}.}
-
-\item{dims}{An array of length = 3,telling the IJK dimension of the cube.
-Has no default.}
 
 \item{order}{A character string defining in which order Petrel exported the grid.
 Petrel Export Options:
