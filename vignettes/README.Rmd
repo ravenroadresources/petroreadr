@@ -1,0 +1,85 @@
+---
+title: "petroreadr"
+author: "Francesco Giorgetti"
+date: "2020-01-20"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+[![Build Status](https://travis-ci.org/frenkg/petroreadr.svg?branch=master)](https://travis-ci.org/frenkg/petroreadr)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+
+
+### petroreadr
+
+This package is currently work-in-progress.
+
+<!-- To install the package, run `devtools::install_github("ravenroadresources/petroreadr")` -->
+To install the package, run `devtools::install_github("frenkg/petroreadr")`
+Once installed, load the package as usual with `library(petroreadr)` 
+
+
+### What Is New In Version 0.3.0
+
+- Two new classes are defined: `las` and `mlas` (multi-las), which means:
+ + meta-information is retained
+ + generic functions now works directly on `las` and `mlas` objects: `print()`, `summary()`, `dim()`, `colnames()`, `head()`, `tail()`, `cbind()`, `rbind()`, `scale()`
+ + new functions to easily manage las files: `join()`, `merge()`, `tracks_summary()`
+ 
+- `read_las()` does not require anymore a `lasnull` argument, which is extracted automatically from the header of the las file
+
+- `write_las()` now handles better the header, and the ascii data is tab spaced
+
+- Two functions from A.Reyes are included: `read_eclgrid()` and `read_eclipse()`
+
+&nbsp;
+
+### `las` Class
+
+- Meta-information can be accessed as:
+ + obj$header for well information
+ + obj$version for las version information (LAS 2.0)
+ + obj$tracks for tracks information
+ + obj$data for the log data as data.frame
+
+- `is.las()`, `as.las()`
+
+&nbsp;
+
+### `mlas` Class
+
+- `is.mlas()`
+
+&nbsp;
+
+### 3D grid 
+
+
+&nbsp;
+
+### Eclipse Sim Results
+
+
+&nbsp;
+
+### Utilities
+
+ - `summary_mod()` is a modified version of the `base::summary` function that adds p90, p10 and st.dev statistics to the output of continous variables.
+ 
+ - `%!in%` is the negation of `%in%`
+ 
+ - `log_breaks` and `log_minorbreaks` arrays are included
+
+

@@ -2,7 +2,9 @@ utils::globalVariables(c("WELL", "."))
 
 #' Read .las files
 #'
-#' This function read well logs data from a .las file and return a data frame with
+#' Deprecated function: use \code{\link{read_las}} instead. this function is temporarly maintained for back compatibility,
+#'    but will no undertake any further development.
+#'    This function read well logs data from a .las file and return a data frame with
 #'    depth and all log values.
 #'    If the \code{filename} you provide does not existe, the function stops and
 #'    return an error message.
@@ -11,7 +13,7 @@ utils::globalVariables(c("WELL", "."))
 #'     <http://www.cwls.org/wp-content/uploads/2017/02/Las2_Update_Feb2017.pdf>
 #'
 #' @param filename A character string giving the name or path of the file to be read.
-#' @param lasnull A character string indicating which value is sued as \code{NULL}
+#' @param lasnull A character string indicating which value is used as \code{NULL}
 #'
 #' @return This function returns a dataframe with the logs data read from a .las file.
 #'    It include a first column with the wellname.
@@ -27,7 +29,7 @@ utils::globalVariables(c("WELL", "."))
 #' }
 #'
 #' @export
-read_las <- function(filename,
+read_las0 <- function(filename,
                      lasnull="-999.250000") {
 
   if(!file.exists(filename)) stop("File '", filename, "' does not exist!")
@@ -36,7 +38,7 @@ read_las <- function(filename,
 
   ### 1. read header of the las file (LAS files have all the headers within first 100 lines)
   headerlines <- readLines(con = lasfile, n = 100L, ok = TRUE, skipNul = TRUE)
-
+  close(lasfile)
   # 1.a get the well name
   #pattern <- paste("WELL *\\.", "WELL\\.", sep = "|")
   oneline <- headerlines[grep("WELL *\\.", headerlines)]
@@ -62,11 +64,13 @@ read_las <- function(filename,
   dataline <- as.numeric(grep(pattern_a, headerlines) + 1)
 
   ### 2. read the log data from the line after ~Ascii
+  lasfile <- file(filename, open="r")
   temp <- utils::read.table(lasfile,
                      header = FALSE,
                      na.strings = lasnull,
                      skip = dataline-1,
-                     col.names = logname)
+                     col.names = logname,
+                     stringsAsFactors = FALSE)
 
   close(lasfile)
 
@@ -340,7 +344,7 @@ read_gslib <- function(filename, complete = TRUE, propnull="-99.00") {
 
   ### 2. read the log data from the line after ~Ascii
   temp <- utils::read.table(asciifile, header = F, na.strings = propnull,
-                     skip = nprop + 2, col.names = propname)
+                     skip = nprop + 2, col.names = propname, stringsAsFactors = FALSE)
 
   close(asciifile)
 
@@ -407,10 +411,10 @@ extract_wellname <- function(oneline) {
 #' }
 #'
 #' @export
-write_las <- function(data, name, verbose = TRUE, do = FALSE) {
+write_las0 <- function(data, name, verbose = TRUE, do = FALSE) {
   wellname <- unique(data$WELL)
   data <- data[ , 2:ncol(data)]
-  filename <- ifelse(grepl(".las", name), name,  paste0(name, ".las"))
+  filename <- ifelse(grepl(".las", name), name, paste0(name, ".las"))
 
   if ("DEPTH" %in% colnames(data)) data %<>% dplyr::rename_("DEPT" = "DEPTH")
 

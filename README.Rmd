@@ -1,7 +1,7 @@
 ---
 title: "README"
-author: "RavenRoad S.A.S."
-date: "2017-09-16"
+author: "Francesco Giorgetti"
+date: "2020-01-20"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -18,20 +18,59 @@ vignette: >
 
 This package is currently work-in-progress.
 
-To install the package, run `devtools::install_github("ravenroadresources/petroreadr")`
-
-At today, it includes 4 functions to read and write file formats commonly used in the oil industry.
-
- * `read_las()`
- * `write_las()`
- * `read_asciigrid()`
- * `read_gslib()`
+<!-- To install the package, run `devtools::install_github("ravenroadresources/petroreadr")` -->
+To install the package, run `devtools::install_github("frenkg/petroreadr")`
 
 
-Additionally, a modified version of the `base::summary` function is included, called `summary_mod`.
-This modified version adds p90, p10 and st.dev statistics to the output.
+### What Is New In Version 0.3.0
+
+- Two new classes are defined: `las` and `mlas` (multi-las), which means:
+ + meta-information is retained
+ + generic functions now works directly on `las` and `mlas` objects: `print()`, `summary()`, `dim()`, `colnames()`, `head()`, `tail()`, `cbind()`, `rbind()`, `scale()`
+ + new functions to easily manage las files: `join()`, `merge()`, `tracks_summary()`
+ 
+- `read_las()` does not require anymore a `lasnull` argument, which is extracted automatically from the header of the las file
+
+- `write_las()` now handles better the header, and the ascii data is tab spaced
+
+- Two functions from A.Reyes are included: `read_eclgrid()` and `read_eclipse()`
 
 &nbsp;
 
-Developed by: [RavenRoad S.A.S.](http://www.ravenroadresources.com)
+### `las` Class
+
+- Meta-information can be accessed as:
+ + obj$header for well information
+ + obj$version for las version information (LAS 2.0)
+ + obj$tracks for tracks information
+ + obj$data for the log data as data.frame
+
+- `is.las()`, `as.las()`
+
+&nbsp;
+
+### `mlas` Class
+
+- `is.mlas()`
+
+&nbsp;
+
+### 3D grid 
+
+
+&nbsp;
+
+### Eclipse Sim Results
+
+
+&nbsp;
+
+### Utilities
+
+ - `summary_mod()` is a modified version of the `base::summary` function that adds p90, p10 and st.dev statistics to the output of continous variables.
+ 
+ - `%!in%` is the negation of `%in%`
+ 
+ - `log_breaks` and `log_minorbreaks` arrays are included
+
 

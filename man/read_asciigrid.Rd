@@ -4,7 +4,8 @@
 \alias{read_asciigrid}
 \title{Read grid properties exported in ascii format}
 \usage{
-read_asciigrid(filename, dims, index = TRUE, order = "IJK", along = "I")
+read_asciigrid(filename, dims, index = TRUE, order = "IJK",
+  along = "I")
 }
 \arguments{
 \item{filename}{A character string giving the name or path of the file to be read.}

@@ -33,5 +33,4 @@ This modified version adds p90, p10 and st.dev statistics to the output.
 
 &nbsp;
 
-Developed by: [RavenRoad S.A.S.](http://www.ravenroadresources.com)
 

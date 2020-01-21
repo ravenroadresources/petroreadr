@@ -75,6 +75,23 @@ summary_mod <- function (object, ..., digits = max(3L, getOption("digits") - 3L)
   else c(Length = length(object), Class = class(object), Mode = mode(object))
   class(value) <- c("summaryDefault", "table")
   value
-} # '
+}
 
 
+
+
+# # Negation of `%in%`
+# # @param x array
+# # @param y array
+# # @export
+# `%!in%` <- function(x, y) {!('%in%'(x, y))}
+
+#' Breaks For log10 Scale
+#'
+#' @export
+log_breaks <- 10^(-10:10)
+
+#' Minor Breaks For log10 Scale
+#'
+#' @export
+log_minor_breaks <- rep(1:9, 21) * (10^rep(-10:10, each = 9))

@@ -1,20 +1,22 @@
 Package: petroreadr
 Type: Package
 Title: Read File Formats Used In The Oil Industry
-Version: 0.2.1
-Author: RavenRoad S.A.S.
-Maintainer: Francesco Giorgetti <fg@ravenroadresources.com>
+Version: 0.3.0
+Author: Francesco Giorgetti
+Maintainer: Francesco Giorgetti <frenk.giorgetti@gmail.com>
 Description: This package include functions to read common file formats used in 
-    the oil industry and converts them into datframes: .las for well logs, 
+    the oil&gas industry and converts them into data frames: .las for well logs, 
     ascii grid properties and .gslib grid properties. 
     More formats will be added with time.
 License: GPL-3 + file LICENSE
+URL: http://www.github.com/frenkg/petroreadr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Imports: dplyr,
     stringr,
-    magrittr
+    magrittr,
+    R6
 Suggests: knitr,
     rmarkdown, 
     roxygen2,
